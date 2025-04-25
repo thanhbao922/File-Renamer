@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>QR Rename Tool</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    input[type="file"] { margin-bottom: 10px; }
+    #log { white-space: pre-wrap; background: #f0f0f0; padding: 10px; border-radius: 5px; }
+    button { margin-top: 10px; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <h1>🔍 QR Rename Tool</h1>
+  <p>Tải lên tệp PDF hoặc hình ảnh chứa mã QR. Ứng dụng sẽ trích xuất mã QR, đổi tên tệp và nén chúng vào một tệp ZIP để tải xuống.</p>
+  <input type="file" id="fileInput" multiple accept=".pdf,.png,.jpg,.jpeg" />
+  <div id="log"></div>
+  <button id="downloadBtn" style="display:none;">📦 Tải xuống ZIP</button>
+
+  <!-- Thư viện cần thiết -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.worker.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const log = document.getElementById('log');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const zip = new JSZip();
+    const renamedFiles = [];
+
+    fileInput.addEventListener('change', async (event) => {
+      log.textContent = '';
+      const files = event.target.files;
+      for (const file of files) {
+        log.textContent += `🔄 Đang xử lý: ${file.name}\n`;
+        const ext = file.name.split('.').pop().toLowerCase();
+        let imageData;
+
+        if (ext === 'pdf') {
+          imageData = await pdfToImageData(file);
+        } else if (['png', 'jpg', 'jpeg'].includes(ext)) {
+          imageData = await imageFileToImageData(file);
+        } else {
+          log.textContent += `❌ Định dạng không hỗ trợ: ${file.name}\n`;
+          continue;
+        }
+
+        if (imageData) {
+          const code = jsQR(imageData.data, imageData.width, imageData.height);
+          if (code) {
+            const newName = `${code.data}.${ext}`;
+            zip.file(newName, file);
+            renamedFiles.push(newName);
+            log.textContent += `✅ Đã đổi tên: ${file.name} → ${newName}\n`;
+          } else {
+            log.textContent += `⚠️ Không tìm thấy mã QR trong: ${file.name}\n`;
+          }
+        } else {
+          log.textContent += `❌ Lỗi khi xử lý: ${file.name}\n`;
+        }
+      }
+
+      if (renamedFiles.length > 0) {
+        downloadBtn.style.display = 'inline-block';
+      } else {
+        downloadBtn.style.display = 'none';
+      }
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      zip.generateAsync({ type: 'blob' }).then((content) => {
+        saveAs(content, 'renamed_files.zip');
+      });
+    });
+
+    async function pdfToImageData(file) {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const page = await pdf.getPage(1);
+      const viewport = page.getViewport({ scale: 2 });
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      await page.render({ canvasContext: context, viewport: viewport }).promise;
+      return context.getImageData(0, 0, canvas.width, canvas.height);
+    }
+
+    async function imageFileToImageData(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const context = canvas.getContext('2d');
+            context.drawImage(img, 0, 0);
+            resolve(context.getImageData(0, 0, canvas.width, canvas.height));
+          };
+          img.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  </script>
+</body>
+</html>
