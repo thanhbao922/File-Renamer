@@ -34,6 +34,11 @@
     fileInput.addEventListener('change', async (event) => {
       log.textContent = '';
       const files = event.target.files;
+
+      // ❌ Reset lại danh sách file và zip khi upload mới
+      renamedFiles.length = 0;
+      zip.files = {};
+
       for (const file of files) {
         log.textContent += `🔄 Đang xử lý: ${file.name}\n`;
         const ext = file.name.split('.').pop().toLowerCase();
