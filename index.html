@@ -25,6 +25,27 @@
     transition: all 0.3s ease;
   }
 
+  #customFileUpload {
+    margin-bottom: 20px;
+    padding: 15px 20px;
+    border: 2px dashed #90caf9;
+    border-radius: 10px;
+    display: inline-block;
+    cursor: pointer;
+    background: #e3f2fd;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1976d2;
+    transition: all 0.3s ease;
+  }
+  
+  #customFileUpload:hover {
+    background: #bbdefb;
+    border-color: #64b5f6;
+    transform: scale(1.02);
+  }
+
+    
   input[type="file"]:hover {
     background: #bbdefb;
     border-color: #64b5f6;
@@ -90,9 +111,13 @@
   </style>
 </head>
 <body>
-  <h1>🔍 QR Rename Tool</h1>
+  <h1>
+    <img src="logo.jpg" alt="Logo" style="width: 40px; vertical-align: middle; margin-right: 10px;">
+    QR Rename Tool
+  </h1>
   <p>Tải lên tệp PDF hoặc hình ảnh chứa mã QR. Ứng dụng sẽ trích xuất mã QR, đổi tên tệp và nén chúng vào một tệp ZIP để tải xuống.</p>
-  <input type="file" id="fileInput" multiple accept=".pdf,.png,.jpg,.jpeg" />
+  <label for="fileInput" id="customFileUpload">📂 Chọn tệp</label>
+  <input type="file" id="fileInput" multiple accept=".pdf,.png,.jpg,.jpeg" style="display:none;" />
   <progress id="progressBar" value="0" max="100"></progress>
   <div id="log"></div>
   <button id="downloadBtn" style="display:none;">📦 Tải xuống ZIP</button>
