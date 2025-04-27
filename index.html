@@ -10,23 +10,9 @@
     font-family: 'Roboto', sans-serif;
     padding: 20px;
   }
-  
-  input[type="file"] {
-    margin-bottom: 10px;
-    padding: 15px; /* Tăng từ 10px → 15px */
-    border: 2px dashed #90caf9;
-    border-radius: 8px; /* Tăng nhẹ bo góc */
-    display: inline-block;
-    cursor: pointer;    
-    background: #e3f2fd;
-    font-size: 16px;
-    font-weight: 500;
-    color: #1976d2;
-    transition: all 0.3s ease;
-  }
 
   #customFileUpload {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding: 15px 20px;
     border: 2px dashed #90caf9;
     border-radius: 10px;
@@ -38,78 +24,81 @@
     color: #1976d2;
     transition: all 0.3s ease;
   }
-  
+
   #customFileUpload:hover {
     background: #bbdefb;
     border-color: #64b5f6;
     transform: scale(1.02);
   }
 
-    
-  input[type="file"]:hover {
-    background: #bbdefb;
-    border-color: #64b5f6;
-    transform: scale(1.02);
+  input[type="file"] {
+    display: none; /* Ẩn input file gốc */
   }
-    
-  #progressBar {
+
+  #fileCount {
     margin-top: 10px;
+    font-weight: bold;
+    color: #1976d2;
   }
-  
+
+  #progressBar {
+    width: 100%;
+    height: 20px;
+    margin-top: 20px;
+    display: none;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #eee;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.2);
+  }
+
+  #progressBar::-webkit-progress-bar {
+    background-color: #eee;
+    border-radius: 10px;
+  }
+
+  #progressBar::-webkit-progress-value {
+    background-image: linear-gradient(to right, #4CAF50, #81C784);
+    border-radius: 10px;
+    transition: width 0.4s ease;
+  }
+
+  #progressBar::-moz-progress-bar {
+    background-image: linear-gradient(to right, #4CAF50, #81C784);
+    border-radius: 10px;
+    transition: width 0.4s ease;
+  }
+
   #log {
     white-space: pre-wrap;
     background: #f0f0f0;
-    padding: 15px;
-    border-radius: 10px; /* Làm bo đẹp hơn */
-    margin-top: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
     border: 1px solid #ddd;
     font-size: 14px;
-    line-height: 1.6; /* 👈 THÊM DÒNG NÀY */
+    line-height: 1.6;
   }
 
-    button {
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    #progressBar {
-      width: 100%;
-      height: 20px;
-      margin-top: 10px;
-      display: none;
-      border-radius: 10px;
-      overflow: hidden;
-      background: #eee;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,.2);
-    }
-    
-    #progressBar::-webkit-progress-bar {
-      background-color: #eee;
-      border-radius: 10px;
-    }
-    
-    #progressBar::-webkit-progress-value {
-      background-image: linear-gradient(to right, #4CAF50, #81C784);
-      border-radius: 10px;
-      transition: width 0.4s ease;
-    }
-    
-    #progressBar::-moz-progress-bar {
-      background-image: linear-gradient(to right, #4CAF50, #81C784);
-      border-radius: 10px;
-      transition: width 0.4s ease;
-    }
-    
+  button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  button:hover {
+    background-color: #45a049;
+    transform: scale(1.03);
+  }
   </style>
 </head>
+
 <body>
   <h1>
     <img src="logo.jpg" alt="Logo" style="width: 40px; vertical-align: middle; margin-right: 10px;">
