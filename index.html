@@ -179,6 +179,7 @@
       }
 
       log.textContent += `\n📦 Tổng kết: ${successCount} file(s) thành công, ${failCount} file(s) lỗi.\n`;
+      alert(`📦 Tổng kết:\n${successCount} file(s) thành công\n${failCount} file(s) lỗi.`);
 
       if (renamedFiles.length > 0) {
         downloadBtn.style.display = 'inline-block';
