@@ -118,6 +118,7 @@
   <p>Tải lên tệp PDF hoặc hình ảnh chứa mã QR. Ứng dụng sẽ trích xuất mã QR, đổi tên tệp và nén chúng vào một tệp ZIP để tải xuống.</p>
   <label for="fileInput" id="customFileUpload">📂 Chọn tệp</label>
   <input type="file" id="fileInput" multiple accept=".pdf,.png,.jpg,.jpeg" style="display:none;" />
+  <div id="fileCount" style="margin-top: 10px; font-weight: bold; color: #1976d2;"></div>
   <progress id="progressBar" value="0" max="100"></progress>
   <div id="log"></div>
   <button id="downloadBtn" style="display:none;">📦 Tải xuống ZIP</button>
@@ -140,9 +141,13 @@
     fileInput.addEventListener('change', async (event) => {
       log.textContent = '';
       const files = event.target.files;
+      document.getElementById('fileCount').textContent = `Đã chọn ${files.length} file(s)`;
 
       renamedFiles.length = 0;
       zip.files = {};
+
+      let successCount = 0;
+      let failCount = 0;
 
       progressBar.style.display = 'block';
       progressBar.value = 0;
@@ -169,17 +174,22 @@
             const newName = `${code.data}.${ext}`;
             zip.file(newName, file);
             renamedFiles.push(newName);
+            successCount++; // ✅ Tăng số lượng file thành công
             log.textContent += `✅ Đã đổi tên: ${file.name} → ${newName}\n`;
           } else {
+            failCount++; // ❌ Tăng số lượng file lỗi
             log.textContent += `⚠️ Không tìm thấy mã QR trong: ${file.name}\n`;
           }
         } else {
+          failCount++; // ❌ Tăng số lượng file lỗi
           log.textContent += `❌ Lỗi khi xử lý: ${file.name}\n`;
         }
 
         processedCount++;
         progressBar.value = (processedCount / files.length) * 100;
       }
+
+      log.textContent += `\n📦 Tổng kết: ${successCount} file(s) thành công, ${failCount} file(s) lỗi.\n`;
 
       if (renamedFiles.length > 0) {
         downloadBtn.style.display = 'inline-block';
