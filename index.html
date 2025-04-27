@@ -14,13 +14,23 @@
   input[type="file"] {
     margin-bottom: 10px;
     padding: 15px; /* Tăng từ 10px → 15px */
-    border: 2px dashed #ccc;
+    border: 2px dashed #90caf9;
     border-radius: 8px; /* Tăng nhẹ bo góc */
     display: inline-block;
-    cursor: pointer;
-    background: #f9f9f9;
+    cursor: pointer;    
+    background: #e3f2fd;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1976d2;
+    transition: all 0.3s ease;
   }
-  
+
+  input[type="file"]:hover {
+    background: #bbdefb;
+    border-color: #64b5f6;
+    transform: scale(1.02);
+  }
+    
   #progressBar {
     margin-top: 10px;
   }
@@ -33,6 +43,7 @@
     margin-top: 10px;
     border: 1px solid #ddd;
     font-size: 14px;
+    line-height: 1.6; /* 👈 THÊM DÒNG NÀY */
   }
 
     button {
