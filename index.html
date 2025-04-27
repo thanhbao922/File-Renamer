@@ -37,12 +37,19 @@
     button:hover {
       background-color: #45a049;
     }
+    #progressBar {
+      width: 100%;
+      height: 20px;
+      margin-top: 10px;
+      display: none;
+    }
   </style>
 </head>
 <body>
   <h1>🔍 QR Rename Tool</h1>
   <p>Tải lên tệp PDF hoặc hình ảnh chứa mã QR. Ứng dụng sẽ trích xuất mã QR, đổi tên tệp và nén chúng vào một tệp ZIP để tải xuống.</p>
   <input type="file" id="fileInput" multiple accept=".pdf,.png,.jpg,.jpeg" />
+  <progress id="progressBar" value="0" max="100"></progress>
   <div id="log"></div>
   <button id="downloadBtn" style="display:none;">📦 Tải xuống ZIP</button>
 
@@ -57,6 +64,7 @@
     const fileInput = document.getElementById('fileInput');
     const log = document.getElementById('log');
     const downloadBtn = document.getElementById('downloadBtn');
+    const progressBar = document.getElementById('progressBar');
     const zip = new JSZip();
     const renamedFiles = [];
 
@@ -66,6 +74,11 @@
 
       renamedFiles.length = 0;
       zip.files = {};
+
+      progressBar.style.display = 'block';
+      progressBar.value = 0;
+
+      let processedCount = 0;
 
       for (const file of files) {
         log.textContent += `🔄 Đang xử lý: ${file.name}\n`;
@@ -94,6 +107,9 @@
         } else {
           log.textContent += `❌ Lỗi khi xử lý: ${file.name}\n`;
         }
+
+        processedCount++;
+        progressBar.value = (processedCount / files.length) * 100;
       }
 
       if (renamedFiles.length > 0) {
@@ -101,6 +117,8 @@
       } else {
         downloadBtn.style.display = 'none';
       }
+
+      progressBar.value = 100;
     });
 
     downloadBtn.addEventListener('click', () => {
