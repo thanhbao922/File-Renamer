@@ -5,6 +5,7 @@
   <title>QR Rename Tool</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="favicon.png">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
   body {
     font-family: 'Roboto', sans-serif;
@@ -179,7 +180,13 @@
       }
 
       log.textContent += `\n📦 Tổng kết: ${successCount} file(s) thành công, ${failCount} file(s) lỗi.\n`;
-      alert(`📦 Tổng kết:\n${successCount} file(s) thành công\n${failCount} file(s) lỗi.`);
+      
+      Swal.fire({
+      icon: 'success',
+      title: '📦 Tổng kết',
+      html: `${successCount} file(s) thành công<br>${failCount} file(s) lỗi.`,
+      confirmButtonText: 'OK',
+      });
 
       if (renamedFiles.length > 0) {
         downloadBtn.style.display = 'inline-block';
