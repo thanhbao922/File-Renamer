@@ -78,7 +78,7 @@
     margin-top: 20px;
     border: 1px solid #ddd;
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 2;
   }
 
   button {
@@ -110,6 +110,7 @@
   <input type="file" id="fileInput" multiple accept=".pdf,.png,.jpg,.jpeg" style="display:none;" />
   <div id="fileCount" style="margin-top: 10px; font-weight: bold; color: #1976d2;"></div>
   <progress id="progressBar" value="0" max="100"></progress>
+  <h2 style="margin-top: 20px; font-size: 20px; color: #333;">📋 Chi tiết</h2>
   <div id="log"></div>
   <button id="downloadBtn" style="display:none;">📦 Tải xuống ZIP</button>
 
@@ -145,7 +146,7 @@
       let processedCount = 0;
 
       for (const file of files) {
-        log.textContent += `🔄 Đang xử lý: ${file.name}\n`;
+        //log.textContent += `🔄 Đang xử lý: ${file.name}\n`;
         const ext = file.name.split('.').pop().toLowerCase();
         let imageData;
 
