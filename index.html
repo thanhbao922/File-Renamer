@@ -138,7 +138,8 @@
         if (imageData) {
           const code = jsQR(imageData.data, imageData.width, imageData.height);
           if (code) {
-            const newName = `${code.data}.${ext}`;
+          const sanitizedData = code.data.replace(/\s+/g, ' ').trim();  // xoá \n, \t → ' '
+          const newName = `${sanitizedData}.${ext}`;
             zip.file(newName, file);
             renamedFiles.push(newName);
             successCount++;
